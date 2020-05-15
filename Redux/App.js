@@ -1,15 +1,30 @@
+import 'react-native-gesture-handler';
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import Constants from 'expo-constants';
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
-// import Components
 import contacts from './contacts';
-import Row from './Row';
-// import ScrollViewContacts from './ScrollViewContacts';
-import SectionListContacts from './SectionListContacts';
-import AddContactForm from './AddContactForm';
+
+// import Screens
+import ContactListscreen from './screens/ContactListScreen';
+
+const MainStack = createStackNavigator({
+  ContactList: ContactListscreen,
+},
+  {
+    initialRoutName: "ContactList",
+    navigationOptions: {
+      headerTintColor: '#a41034',
+      headerStyle: {
+        backgroundColor: '#fff',
+      }
+    }
+  }
+);
+
+const AppContainer = createAppContainer(MainStack);
 
 export default class App extends Component {
   state = {
@@ -30,13 +45,10 @@ export default class App extends Component {
   showForm = () => this.setState({ showForm: true })
 
   render() {
-    if (this.state.showForm) return <AddContactForm onSubmit={this.addContact} />
     return (
-      <View style={styles.container}>
-        <Button title="Toggle Contact" onPress={this.toggle} />
-        <Button title="add Contact" onPress={this.showForm} />
-        {this.state.showContacts && (<SectionListContacts contacts={this.state.contacts} />)}
-      </View>
+      <AppContainer 
+      screenProps={{ contacts: this.state.contacts, addContact: this.addContact }} 
+      />
     )
   };
 }
