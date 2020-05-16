@@ -2,16 +2,25 @@ import 'react-native-gesture-handler';
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import Constants from 'expo-constants';
-import { createAppContainer } from 'react-navigation';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 import contacts from './contacts';
 
 // import Screens
 import ContactListscreen from './screens/ContactListScreen';
+import AddContactScreen from './screens/AddContactScreen';
+import ContactDetailsScreen from './screens/ContactDetailsScreen';
+import SettingsScreen from './screens/SettingsScreen';
+import LoginScreen from './screens/LoginScreen';
+
 
 const MainStack = createStackNavigator({
   ContactList: ContactListscreen,
+  ContactDetails: ContactDetailsScreen,
+  AddContact: AddContactScreen,
 },
   {
     initialRoutName: "ContactList",
@@ -24,7 +33,31 @@ const MainStack = createStackNavigator({
   }
 );
 
-const AppContainer = createAppContainer(MainStack);
+MainStack.navigationOptions = {
+  tabBarIcon: ({ focused, tintColor }) => (
+    <Ionicons
+      name={`ios-contacts${focused ? "" : "-outline"}`}
+      size={25}
+      color={tintColor}
+    />
+  )
+};
+
+const MainTabs = createBottomTabNavigator({
+  Contacts: MainStack,
+  Settings: SettingsScreen,
+}, {
+  tabBarOptions: {
+    activeTintColor: '#a41034',
+  }
+});
+
+const AppNavigator = createSwitchNavigator({
+  Login: LoginScreen,
+  Main: MainTabs,
+})
+
+const AppContainer = createAppContainer(AppNavigator);
 
 export default class App extends Component {
   state = {
@@ -40,14 +73,10 @@ export default class App extends Component {
     }))
   }
 
-  toggle = () => this.setState(prevState => ({ showContacts: !prevState.showContacts }));
-
-  showForm = () => this.setState({ showForm: true })
-
   render() {
     return (
-      <AppContainer 
-      screenProps={{ contacts: this.state.contacts, addContact: this.addContact }} 
+      <AppContainer
+        screenProps={{ contacts: this.state.contacts, addContact: this.addContact }}
       />
     )
   };

@@ -7,7 +7,7 @@ export default class ContactListScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       headerTitle: 'Contacts',
-      headerRight: (
+      headerRight: () => (
         <Button
           title="Add"
           onPress={() => navigation.navigate('AddContact')}
