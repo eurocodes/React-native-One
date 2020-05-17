@@ -6,8 +6,10 @@ import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { Provider } from 'react-redux';
 
 import contacts from './contacts';
+import store from './redux/store';
 
 // import Screens
 import ContactListscreen from './screens/ContactListScreen';
@@ -61,10 +63,19 @@ const AppContainer = createAppContainer(AppNavigator);
 
 export default class App extends Component {
   state = {
-    showContacts: false,
-    showForm: false,
     contacts,
   }
+
+  /*
+  componentDidMount() {
+    this.getUsers()
+  }
+
+  getUsers = async () => {
+    const results = await fetchUsers()
+    this.setState({contacts: results})
+  }
+  */
 
   addContact = newContact => {
     this.setState(prevState => ({
@@ -75,9 +86,11 @@ export default class App extends Component {
 
   render() {
     return (
-      <AppContainer
-        screenProps={{ contacts: this.state.contacts, addContact: this.addContact }}
-      />
+      <Provider store={store}>
+        <AppContainer
+        // screenProps={{ contacts: this.state.contacts, addContact: this.addContact }}
+        />
+      </Provider>
     )
   };
 }
