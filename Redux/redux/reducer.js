@@ -1,6 +1,6 @@
-import {combineReducers} from 'redux'
+import { combineReducers } from 'redux'
 
-import {UPDATE_USER, UPDATE_CONTACT} from './actions'
+import { UPDATE_USER, UPDATE_CONTACT, LOGIN_SENT, LOGIN_SUCCESS, LOGIN_REJECTED } from './actions'
 
 const merge = (prev, next) => Object.assign({}, prev, next)
 
@@ -14,7 +14,11 @@ const userReducer = (state = {}, action) => {
     case UPDATE_USER:
       return merge(state, action.payload)
     case UPDATE_CONTACT:
-      return merge(state, {prevContact: action.payload})
+      return merge(state, { prevContact: action.payload })
+    case LOGIN_SUCCESS:
+      return merge(state, { token: action.payload })
+    case LOGIN_REJECTED:
+      return merge(state, { loginErr: action.payload })
     default:
       return state
   }
