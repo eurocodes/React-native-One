@@ -7,9 +7,10 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react'
 
 import contacts from './contacts';
-import store from './redux/store';
+import { store, persistor } from './redux/store';
 
 // import Screens
 import ContactListscreen from './screens/ContactListScreen';
@@ -87,9 +88,9 @@ export default class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <AppContainer
-        // screenProps={{ contacts: this.state.contacts, addContact: this.addContact }}
-        />
+        <PersistGate loading={null} persistor={persistor}>
+          <AppContainer />
+        </PersistGate>
       </Provider>
     )
   };
